@@ -1,16 +1,14 @@
-# This is a sample Python script.
+import time
+from visualization import visualization
+from data_structures.red_black_tree import Tree
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    tree = Tree()
+    for i in range(50):
+        tree.insert(i)
+        time.sleep(1)
+        visualization.show(tree)
+    # for i in range(0):
+    #  tree.delete(i)
+    # print(tree._minimum(tree.root).val)
+    # tree.delete(tree.root)

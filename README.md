@@ -9,15 +9,20 @@ RB-дерево vs Хеш-таблица (метод цепочек).
 
 ## Notes
 
+https://www.programiz.com/dsa/red-black-tree
+
 ### Red-black Tree
 
 Properties:
-![img.png](img.png)
+![img.png](src/img.png)
 Insertion cases:
-![img_1.png](img_1.png)
-Insertion
+![img_1.png](src/img_1.png)
+
+case 0: 
 
 ### Generating tests
 
 - Create random array name it d, insert it in data structures. Shuffle d, extract elements from data structures according to d.
-- 
+
+### Исследование
+- Время добавления, удаления. Сравнения различных способов динамического расширения хэш таблицы. Различные коэффициенты заполняемости. Различные хэш функции
