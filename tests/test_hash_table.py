@@ -13,4 +13,10 @@ def test_add_and_delete(input):
         ht.delete(el)
         assert ht.get(key=el) == None
 
+@pytest.mark.parametrize("input", [(100), (1000), (10000), (100000)])
+def test_add_a_lot_of_elements_init(input):
+    ht = hash_table.HashTable(list(range(0, input)))
+    sizes = [2 ** i for i in range(4, 12)]
+    ht = [(hash_table.HashTable(list(range(size))), list(range(size))) for size in sizes]
+
 

@@ -1,3 +1,7 @@
+import math
+import time
+
+
 class Node:
     def __init__(self, key, val):
         self.next = None
@@ -5,14 +9,19 @@ class Node:
         self.val = val
 
 
-class List_imp:
+class List_for_hash_table:
     def __init__(self, node=None):
         self.head = node
-        self.end = node
 
     def add_node(self, node):
-        self.end.next = node
-        self.end = node
+        current = self.head
+        if current.key == node.key:
+            raise KeyError
+        while current.next is not None:
+            current = current.next
+            if current.key == node.key:
+                raise KeyError
+        current.next = node
 
     def deleteNode(self, key):
 
@@ -40,8 +49,6 @@ class List_imp:
 
         # Unlink the node from linked list
         prev.next = temp.next
-        if temp == self.end:
-            self.end = prev
         temp = None
 
     def get_val(self, key):
@@ -53,16 +60,19 @@ class List_imp:
             current = current.next
         return None
 
-    def print(self):
+    def get_keys(self):
         current = self.head
-        s = ""
+        s = []
         while current is not None:
-            s += " " + str(current.val)
+            s.append(current.key)
             current = current.next
-        print(s)
+        return s
 
 
 class HashTable:
+
+
+
     def __init__(self, values=[]):
         self.size = 10
         self.counter = 0
@@ -70,21 +80,30 @@ class HashTable:
         for val in values:
             self.insert(val)
 
-    def hash_simple(self, key: int):
+    def _hash_simple(self, key: int):
         return key % self.size
+
+    def _python_hash(self, key):
+        return hash(str(key)) % self.size
+
+    def _mul_hash(self, key):
+        return math.floor(self.size*(0.61803398*key % 1))
+
+    def hash_custom(self, key):
+        return self._python_hash(key)
 
     def insert(self, key, val=123):
         self.counter += 1
-        index = self.hash_simple(key)
+        index = self.hash_custom(key)
         list_on_index = self.table[index]
         if list_on_index == None:
-            self.table[index] = List_imp(Node(key=key, val=val))
+            self.table[index] = List_for_hash_table(Node(key=key, val=val))
         else:
             list_on_index.add_node(Node(key=key, val=val))
-        if self.counter * 1.3 >= self.size: self.resize()
+        self.resize()
 
     def get(self, key):
-        index = self.hash_simple(key)
+        index = self.hash_custom(key)
         list_on_index = self.table[index]
         res_val = None
         current = list_on_index.head
@@ -94,13 +113,18 @@ class HashTable:
         return res_val
 
     def delete(self, key):
-        index = self.hash_simple(key)
+        index = self.hash_custom(key)
         list_on_index = self.table[index]
         list_on_index.deleteNode(key=key)
+        self.resize()
 
     def resize(self):
+        #start = time.time()
+        alpha = self.counter / self.size
+        if alpha >= 0.7: self.size *= 2
+        elif alpha < 0.2: self.size //= 2
+        else: return
         old_table = self.table
-        self.size = self.size**2
         self.table = [None] * self.size
         for list_i in old_table:
             if list_i is not None:
@@ -108,23 +132,13 @@ class HashTable:
                 while current is not None:
                     self.insert(current.key, current.val)
                     current = current.next
+        #print(time.time()-start)
+    def keys(self):
+        res = []
+        for list in self.table:
+            if list is not None: res.extend(list.get_keys())
+        return res
 
 
 if __name__ == "__main__":
-    ht = HashTable()
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
-    ht.insert(10, 100)
-    ht.insert(20, 200)
+    ht = HashTable(list(range(0, 10000)))

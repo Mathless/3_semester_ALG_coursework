@@ -13,4 +13,12 @@ def test_add_and_delete(input):
         tree.delete(el)
         assert tree.find(el)==tree.nil
 
+@pytest.mark.parametrize("input", [(100), (1000), (10000), (100000)])
+def test_add_a_lot_of_elements_init(input):
+    tr = red_black_tree.Tree(list(range(0, input)))
+    sizes = [2 ** i for i in range(4, 12)]
+    tr = [(red_black_tree.Tree(list(range(size))), list(range(size))) for size in sizes]
+
+
+
 
